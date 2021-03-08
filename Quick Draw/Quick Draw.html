@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Quick Draw</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="index.css" rel="stylesheet" type="text/css">
+    
+    
+
+    <script> 
+      document.oncontextmenu = new Function("return false");
+      document.onselectstart = Function("return false");
+      document.ondragstart = Function("return false");
+    </script>
+    
+ 
+</head>
+<body>
+    <div id="main">
+        <div style="margin: 20px 0px 0px 0px;">
+            <a href="javascript:return false;" class="btn-question" onclick="javascript: question()" >關於</a>
+        </div>
+        <div id="question-card" class="question visible" style="display: none;">
+          <div class="about">關於這個遊戲</div>
+          <div class="button" style="bottom: 30px;">
+            <div class="exitquestion" onclick="exitquestion()">exit</div>
+          </div>
+          <div class="video">
+            <div class="video"><a href="https://www.youtube.com/watch?v=AZnrIIsFM-E&ab_channel=Muse%E6%9C%A8%E6%A3%89%E8%8A%B1-TW" target="_blank" style="text-decoration: none; color: yellow;">教學影片</a></div>
+          </div>
+          <div class="oshiete">這個是用模型....</div>
+          
+        </div>
+        <div class="top-picture">
+            <img class="top-picture" src="https://images2.imgbox.com/2e/29/hwGn5PBQ_o.png">
+        </div>
+        <div style="position: relative; left: 150px;">
+            <span id="text-one">
+                <span class=text-one-1>
+                    AI能學會辯識塗鴉嗎？</span>
+            </span>
+        </div>
+        <div style="text-align: left;">
+            <span id="text-two">
+                <span class="text-one-2">
+                只要將你的繪圖資料加到
+                <a target="_blank" href="https://github.com/stanser12/QDD">資料庫</a>，就能協助訓練AI。<br>
+這個資料集的內容會公開分享，為深度學習研究提供參考資料。
+                </span>
+            </span>
+        </div>
+        <div style="display:none;"><audio id="audio1" src="music/start.mp3" controls preload="auto" autobuffer></audio></div>
+        <div style="display:none;"><audio id="audio2" src="music/fail.mp3" controls preload="auto" autobuffer></audio></div>
+        <div class="startgame">
+          <a href="javascript:return false;" class="btn-push navy" onclick="javascript: starts()">スタート</a>
+        </div>
+
+        <div id="start-card" class="start visible" style="display: none;">
+          <div style="background-color: #FFF4C1">
+          <div id="behind" class="behind">
+              <div id="topic" class="size1"> 題目:<div id="topicc" style="display: none;">題目</div> </div>
+                <div class="size1">倒數時間:
+                  <span id="timer" class="but">5
+                  </span>
+                </div>
+              <div class="size1">
+                <button class=but onclick="exitgame()">離開
+                </button>
+              </div>
+            </div>
+            <div class="center01">
+              <button id="game_start" class="but" onclick="pameStart()" class="front" >
+                <span class="gameStart">開始
+                </span>
+              </button>
+            </div>
+            <div class="center01">
+              <button id="ClearID" class="but" style="display: none;"  onclick="Clear()"> 清除
+              </button>
+            </div>
+            <div id="actions" class="actions">
+              <button id="save" class="save" style="display: block; " onclick="save()">存檔</button>
+            </div>
+
+            <div class="col">
+              <section style="margin-top:120px">
+              <div class="pieID pie">
+                
+              </div>
+              <ul class="pieID legend">
+                <li>
+                  <em id = "sym1"></em>
+                  <span id = "prob1" ></span>
+                </li>
+                <li>
+                  <em id = "sym2"></em>
+                  <span id = "prob2"></span>
+                </li>
+                <li>
+                  <em id = "sym3"></em>
+                  <span id = "prob3"></span>
+                </li>
+                <li>
+                  <em id = "sym4"></em>
+                  <span id = "prob4"></span>
+                </li>
+                <li>
+                  <em id = "sym5"></em>
+                  <span id = "prob5"></span>
+                </li>
+              </ul>
+            </section>
+          </div>
+
+            <canvas id="draw" class="canvas" >
+            </canvas>
+            
+
+          </div>
+        </div>
+    </div>
+    <script src="indexjs.js"></script>
+    <script src="model.js"></script>    
+  </body>
+</html>
