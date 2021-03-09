@@ -156,9 +156,7 @@ function allowDrawing(){
 loadModel()
 	  
 var model;
-var canvas;
 var symbols = [{}];
-var canvas; 
 var coords = [] ;
 var mousePressed = false; 
 	  
