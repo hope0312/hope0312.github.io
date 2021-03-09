@@ -69,10 +69,6 @@
         <div id="start-card" class="start visible" style="display: none;">
           <div style="background-color: #FFF4C1">
           <div id="behind" class="behind">
-            <div class="row">
-              <div class="col" style ='margin-left:100px;'>
-                <h4 id ='status' >Loading Model... </h4>
-              </div>
             </div>
               <div id="topic" class="size1"> 題目:<div id="topicc" style="display: none;">題目</div> </div>
                 <div class="size1">倒數時間:
@@ -98,32 +94,47 @@
               <button id="save" class="save" style="display: block; " onclick="save()">存檔</button>
             </div>
 
-            <div class="col">
-              <section style="margin-top:120px">
-              <ul class="pieID legend">
-                <li>
-                  <em id = "sym1"></em>
-                  <span id = "prob1" ></span>
-                </li>
-                <li>
-                  <em id = "sym2"></em>
-                  <span id = "prob2"></span>
-                </li>
-                <li>
-                  <em id = "sym3"></em>
-                  <span id = "prob3"></span>
-                </li>
-                <li>
-                  <em id = "sym4"></em>
-                  <span id = "prob4"></span>
-                </li>
-                <li>
-                  <em id = "sym5"></em>
-                  <span id = "prob5"></span>
-                </li>
-              </ul>
+
+            <div class="row">
+              <div class="col" style ='margin-left:100px;'>
+            <h4 id ='status' >Loading Model... </h4>	  
+            <canvas id="canvas" width="300" height="300" class="canvas" style="border:1px solid #b9bfc9;margin-top:25px;"></canvas>
+            <div class="btn-group" style = 'margin-top:40px; '>
+            <input type="range" min="5" max="20" value="10" class="slider" id="myRange" style ='margin-top:20px;'>
+            <button type="button" class="btn btn-outline-primary" onclick ='erase()' style ='margin-left:10px;' disabled>Clear</button>
+                </div>
+            <button class="123" onclick="start()">start</button>
+            </div>
+              <div class="col">
+                <section style="margin-top:120px">
+                <div class="pieID pie">
+                  
+                </div>
+                <ul class="pieID legend">
+                  <li>
+                    <em id = "sym1"></em>
+                    <span id = "prob1" ></span>
+                  </li>
+                  <li>
+                    <em id = "sym2"></em>
+                    <span id = "prob2"></span>
+                  </li>
+                  <li>
+                    <em id = "sym3"></em>
+                    <span id = "prob3"></span>
+                  </li>
+                  <li>
+                    <em id = "sym4"></em>
+                    <span id = "prob4"></span>
+                  </li>
+                  <li>
+                    <em id = "sym5"></em>
+                    <span id = "prob5"></span>
+                  </li>
+                </ul>
               </section>
-          </div>
+            </div>
+            </div>
 
             <canvas id="draw" class="canvas" >
             </canvas>
@@ -133,6 +144,10 @@
         </div>
     </div>
     <script src="indexjs.js"></script>
-    <script src="model.js"></script>    
+    <script src="model.js"></script>
+    <script>
+      console.log('starting');
+      start();
+    </script>    
   </body>
 </html>
