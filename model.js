@@ -123,7 +123,7 @@ function preprocess(imgData)
 {
 return tf.tidy(()=>{
 	  
-    const tensor = tf.fromPixels(imgData).toFloat()
+    const tensor = tf.browse.fromPixels(imgData).toFloat()
     const offset = tf.scalar(255.0);
     // Normalize the image 
     const normalized = tf.scalar(1.0).sub(tensor.div(offset));
