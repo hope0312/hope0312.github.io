@@ -320,3 +320,15 @@ function allowDrawing() {
         canvas.freeDrawingBrush.width = this.value;
     };
 }
+
+//load the model 
+async function loadModel()
+{
+    model = await tf.loadLayersModel('model.json')
+    //warm up 
+    model.predict(tf.zeros([1,28,28,1]))
+    allowDrawing()
+    await loadDict()
+}
+
+loadModel()
