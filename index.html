@@ -69,11 +69,6 @@
         <div id="start-card" class="start visible" style="display: none;">
           <div style="background-color: #FFF4C1">
           <div id="behind" class="behind">
-            <div class="row">
-              <div class="col" style ='margin-left:100px;'>
-                <h4 id ='status' >Loading Model... </h4>
-              </div>
-            </div>
               <div id="topic" class="size1"> 題目:<div id="topicc" style="display: none;">題目</div> </div>
                 <div class="size1">倒數時間:
                   <span id="timer" class="but">5
@@ -90,10 +85,7 @@
                 </span>
               </button>
             </div>
-            <div class="center01">
-              <button id="ClearID" class="but" style="display: none;"  onclick="Clear()"> 清除
-              </button>
-            </div>
+
             <div id="actions" class="actions">
               <button id="save" class="save" style="display: block; " onclick="save()">存檔</button>
             </div>
@@ -124,9 +116,14 @@
               </ul>
               </section>
           </div>
-
-            <canvas id="draw" class="canvas" >
-            </canvas>
+          <div class="row">
+            <div class="col" style ='margin-left:100px;'>
+          <h4 id ='status' >Loading Model... </h4>	  
+          <canvas id="canvas" width="300" height="300" class="canvas" style="border:1px solid #b9bfc9;margin-top:25px;"></canvas>
+          <div class="btn-group" style = 'margin-top:40px; '>
+          <input type="range" min="5" max="20" value="10" class="slider" id="myRange" style ='margin-top:20px;'>
+          <button type="button" class="btn btn-outline-primary" onclick ='erase()' style ='margin-left:10px;' disabled>Clear</button>
+              </div>
             
 
           </div>

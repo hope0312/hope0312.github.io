@@ -2,7 +2,6 @@
 function starts(){
     document.getElementById("start-card").style.display="";
 	EvalSound('audio1');
-	timer.innerHTML=5;
 }
 
 function exitgame(){
@@ -29,58 +28,39 @@ function save(){
 }
 
 
-/*畫板*/
-const canvas = document.querySelector('#draw');
-canvas.width = window.innerWidth-50;
-canvas.height = window.innerHeight-150;
-const ctx = canvas.getContext('2d');
-ctx.strokeStyle='#BADA55';
-ctx.lineJoin = 'round';
-ctx.lineCap = 'round';
-ctx.lineWidth = 10;
-
-
-let isDrawing=false;
-let lastX=0;
-let lastY=0;
-let hue=20;
-let direction=true;
-		
-function draw(e) {
-	if(!isDrawing) return;
-	console.log(e)
-	ctx.strokeStyle=`hsl(${hue},88%,50%)`;
-		
-	ctx.beginPath();
-	ctx.moveTo(lastX, lastY);
-	ctx.lineTo(e.offsetX, e.offsetY);
-	ctx.stroke();
-	[lastX, lastY] = [e.offsetX, e.offsetY];
-	// canvas.on('mouse:up', function(e) {
-    //     getFrame();
-    //     mousePressed = false
-    // });
-    // canvas.on('mouse:down', function(e) {
-    //     mousePressed = true
-    // });
-    // canvas.on('mouse:move', function(e) {
-    //     recordCoor(e)
-    // });
-	
-	}
-canvas.addEventListener('mousedown', (e) => {
-	isDrawing = true;
-	[lastX,lastY]=[e.offsetX,e.offsetY];
-	});
-canvas.addEventListener('mousemove', draw);
-canvas.addEventListener('mouserecord',(e) => {
-	recordCoor();
+/*
+variables
+*/
+var canvas;
+var classNames = [];
+var canvas;
+var coords = [];
+var mousePressed = false;
+var mode;
+console.log('yamede')
+/*
+prepare the drawing canvas 
+*/
+$(function() {
+    canvas = window._canvas = new fabric.Canvas('canvas');
+    canvas.backgroundColor = '#ffffff';
+    canvas.isDrawingMode = 0;
+    canvas.freeDrawingBrush.color = "black";
+    canvas.freeDrawingBrush.width = 10;
+    canvas.renderAll();
+    //setup listeners 
+    canvas.on('mouse:up', function(e) {
+        getFrame();
+        mousePressed = false
+    });
+    canvas.on('mouse:down', function(e) {
+        mousePressed = true
+    });
+    canvas.on('mouse:move', function(e) {
+        recordCoor(e)
+    });
 })
 
-canvas.addEventListener('mouseup', () => {
-	isDrawing = false 
-	getFrame();});
-canvas.addEventListener('mouseout', () => isDrawing = false);
 
 
 /*
@@ -97,10 +77,16 @@ function recordCoor(event) {
 }
 
 
-function Clear(){
-	ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-};
+
+/*
+clear the canvs 
+*/
+function erase() {
+    canvas.clear();
+    canvas.backgroundColor = '#ffffff';
+    coords = [];
+}
+
 
 var timer;
 var over =0;
@@ -149,22 +135,7 @@ function countdown(){
 // 	front.style.display="block";
 // 	behind.style.display="none";
 // }
-function ShowCanvas(){
-	var ShowCanvas=document.getElementById("draw");
-	var ClearID=document.getElementById("ClearID");
-	ShowCanvas.style.display="block";
-	ClearID.style.display="block";
-	ClearID.style.margin="0px auto";
-    document.getElementById("topicc").style.display="";
-}
-function DisCancas(){
-	var DisCancas=document.getElementById("draw");
-	var ClearID=document.getElementById("ClearID");
-	DisCancas.style.display="none";
-	ClearID.style.display="none";
-    document.getElementById("topicc").style.display="none";
-    
-}
+
 
 function target(){
 	var target=["骷髏頭","骷髏頭","燈泡","圓","足球","蘑菇","降落傘","漢堡","帽子","臉","眼睛",
@@ -333,4 +304,20 @@ return tf.tidy(()=>{
     const batched = sliced.expandDims(0)
     return batched
 })
+}
+
+/*
+allow drawing on canvas
+*/
+function allowDrawing() {
+    canvas.isDrawingMode = 1;
+    if (mode == 'en')
+        document.getElementById('status').innerHTML = 'Model Loaded';
+    else
+        document.getElementById('status').innerHTML = 'تم التحميل';
+    $('button').prop('disabled', false);
+    var slider = document.getElementById('myRange');
+    slider.oninput = function() {
+        canvas.freeDrawingBrush.width = this.value;
+    };
 }
