@@ -56,14 +56,59 @@ function draw(e) {
 	ctx.lineTo(e.offsetX, e.offsetY);
 	ctx.stroke();
 	[lastX, lastY] = [e.offsetX, e.offsetY];
+	// canvas.on('mouse:up', function(e) {
+    //     getFrame();
+    //     mousePressed = false
+    // });
+    // canvas.on('mouse:down', function(e) {
+    //     mousePressed = true
+    // });
+    // canvas.on('mouse:move', function(e) {
+    //     recordCoor(e)
+    // });
+	
 	}
 canvas.addEventListener('mousedown', (e) => {
 	isDrawing = true;
 	[lastX,lastY]=[e.offsetX,e.offsetY];
+	recordCoor(e);
 	});
-canvas.addEventListener('mousemove', draw);	
+canvas.addEventListener('mousemove', draw);
+
 canvas.addEventListener('mouseup', () => isDrawing = false);
 canvas.addEventListener('mouseout', () => isDrawing = false);
+
+
+function recordCoor(event) {
+    var pointer = canvas.getPointer(event.e);
+    var posX = pointer.x;
+    var posY = pointer.y;
+
+    if (posX >= 0 && posY >= 0 && mousePressed) {
+        coords.push(pointer)
+    }
+}
+
+function getFrame() {
+    //make sure we have at least two recorded coordinates 
+    if (coords.length >= 2) {
+
+        //get the image data from the canvas 
+        const imgData = getImageData()
+
+        //get the prediction 
+        const pred = model.predict(preprocess(imgData)).dataSync()
+
+        //find the top 5 predictions 
+        const indices = findIndicesOfMax(pred, 5)
+        const probs = findTopValues(pred, 5)
+        const names = getClassNames(indices)
+
+        //set the table 
+        setTable(names, probs)
+    }
+
+}
 
 
 function Clear(){
