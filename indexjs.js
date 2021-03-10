@@ -73,9 +73,28 @@ canvas.addEventListener('mousedown', (e) => {
 	[lastX,lastY]=[e.offsetX,e.offsetY];
 	});
 canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouserecord',(e) => {
+	recordCoor();
+})
 
-canvas.addEventListener('mouseup', () => isDrawing = false);
+canvas.addEventListener('mouseup', () => {
+	isDrawing = false 
+	getFrame();});
 canvas.addEventListener('mouseout', () => isDrawing = false);
+
+
+/*
+record the current drawing coordinates
+*/
+function recordCoor(event) {
+    var pointer = canvas.getPointer(event.e);
+    var posX = pointer.x;
+    var posY = pointer.y;
+
+    if (posX >= 0 && posY >= 0 && mousePressed) {
+        coords.push(pointer)
+    }
+}
 
 
 function Clear(){
@@ -162,4 +181,71 @@ function EvalSound(soundobj) {
 	thissound.play();
 }
 
+
+/*
+get the best bounding box by trimming around the drawing
+*/
+function getMinBox() {
+    //get coordinates 
+    var coorX = coords.map(function(p) {
+        return p.x
+    });
+    var coorY = coords.map(function(p) {
+        return p.y
+    });
+
+    //find top left and bottom right corners 
+    var min_coords = {
+        x: Math.min.apply(null, coorX),
+        y: Math.min.apply(null, coorY)
+    }
+    var max_coords = {
+        x: Math.max.apply(null, coorX),
+        y: Math.max.apply(null, coorY)
+    }
+
+    //return as strucut 
+    return {
+        min: min_coords,
+        max: max_coords
+    }
+}
+
+/*
+get the current image data 
+*/
+function getImageData() {
+        //get the minimum bounding box around the drawing 
+        const mbb = getMinBox()
+
+        //get image data according to dpi 
+        const dpi = window.devicePixelRatio
+        const imgData = canvas.contextContainer.getImageData(mbb.min.x * dpi, mbb.min.y * dpi,
+                                                      (mbb.max.x - mbb.min.x) * dpi, (mbb.max.y - mbb.min.y) * dpi);
+        return imgData
+    }
+
+/*
+get the prediction 
+*/
+function getFrame() {
+    //make sure we have at least two recorded coordinates 
+    if (coords.length >= 2) {
+
+        //get the image data from the canvas 
+        const imgData = getImageData()
+
+        //get the prediction 
+        const pred = model.predict(preprocess(imgData)).dataSync()
+
+        //find the top 5 predictions 
+        const indices = findIndicesOfMax(pred, 5)
+        const probs = findTopValues(pred, 5)
+        const names = getClassNames(indices)
+
+        //set the table 
+        setTable(names, probs)
+    }
+
+}
 
