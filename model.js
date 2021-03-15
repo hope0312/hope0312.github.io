@@ -123,7 +123,7 @@ function preprocess(imgData)
 {
 return tf.tidy(()=>{
 	  
-    const tensor = tf.browse.fromPixels(imgData).toFloat()
+    const tensor = tf.fromPixels(imgData).toFloat()
     const offset = tf.scalar(255.0);
     // Normalize the image 
     const normalized = tf.scalar(1.0).sub(tensor.div(offset));
@@ -149,8 +149,8 @@ function allowDrawing(){
     canvas.isDrawingMode= 1;
     document.getElementById('status').innerHTML ='Model Loaded';
     $('button').prop('disabled', false); 
-    // var slider = document.getElementById('myRange');
-    // slider.oninput = function(){canvas.freeDrawingBrush.width = this.value;};
+    var slider = document.getElementById('myRange');
+    slider.oninput = function(){canvas.freeDrawingBrush.width = this.value;};
 }	  
 	  
 loadModel()

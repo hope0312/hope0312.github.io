@@ -1,7 +1,10 @@
 
 function starts(){
     document.getElementById("start-card").style.display="";
+	target();
 	EvalSound('audio1');
+	timer.innerHTML=20;
+	
 }
 
 function exitgame(){
@@ -27,66 +30,60 @@ function save(){
     a.click()
 }
 
-
-/*
-variables
-*/
-var canvas;
-var classNames = [];
-var canvas;
-var coords = [];
-var mousePressed = false;
-var mode;
-console.log('yamede')
-/*
-prepare the drawing canvas 
-*/
-$(function() {
-    canvas = window._canvas = new fabric.Canvas('canvas');
-    canvas.backgroundColor = '#ffffff';
-    canvas.isDrawingMode = 0;
-    canvas.freeDrawingBrush.color = "black";
-    canvas.freeDrawingBrush.width = 10;
-    canvas.renderAll();
-    //setup listeners 
-    canvas.on('mouse:up', function(e) {
-        getFrame();
-        mousePressed = false
-    });
-    canvas.on('mouse:down', function(e) {
-        mousePressed = true
-    });
-    canvas.on('mouse:move', function(e) {
-        recordCoor(e)
-    });
-})
-
-
-
-/*
-record the current drawing coordinates
-*/
-function recordCoor(event) {
-    var pointer = canvas.getPointer(event.e);
-    var posX = pointer.x;
-    var posY = pointer.y;
-
-    if (posX >= 0 && posY >= 0 && mousePressed) {
-        coords.push(pointer)
-    }
+function oo(){
+	document.getElementById("over-last").style.display="";
 }
 
-
-
-/*
-clear the canvs 
-*/
-function erase() {
-    canvas.clear();
-    canvas.backgroundColor = '#ffffff';
-    coords = [];
+function comeindex(){
+	document.getElementById("start-card").style.display="none";
+	document.getElementById("over-last").style.display="none";
+}
+function onemore(){
+	document.getElementById("over-last").style.display="none";
+	target();
 }
 
+/*畫板*/
+const canvas = document.querySelector('#draw');
+canvas.width = window.innerWidth-50;
+canvas.height = window.innerHeight-150;
+const ctx = canvas.getContext('2d');
+ctx.strokeStyle='#BADA55';
+ctx.lineJoin = 'round';
+ctx.lineCap = 'round';
+ctx.lineWidth = 10;
+
+
+let isDrawing=false;
+let lastX=0;
+let lastY=0;
+let hue=0;
+let direction=true;
+		
+function draw(e) {
+	if(!isDrawing) return;
+	console.log(e)
+	ctx.strokeStyle=`hsl(${hue},88%,50%)`;
+		
+	ctx.beginPath();
+	ctx.moveTo(lastX, lastY);
+	ctx.lineTo(e.offsetX, e.offsetY);
+	ctx.stroke();
+	[lastX, lastY] = [e.offsetX, e.offsetY];
+	}
+canvas.addEventListener('mousedown', (e) => {
+	isDrawing = true;
+	[lastX,lastY]=[e.offsetX,e.offsetY];
+	});
+canvas.addEventListener('mousemove', draw);	
+canvas.addEventListener('mouseup', () => isDrawing = false);
+canvas.addEventListener('mouseout', () => isDrawing = false);
+
+
+function Clear(){
+	ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+};
 
 var timer;
 var over =0;
@@ -95,7 +92,7 @@ function pameStart(){
 	pameStart1.style.display="none";
 	ShowCanvas();
 	Clear();
-	target();
+	// target();
 	timer=document.getElementById("timer");
 	window.setTimeout(countdown, 1000);
 }; 
@@ -113,10 +110,12 @@ function countdown(){
     // }
 	else{EvalSound('audio2');
 		alert('時間到!!');
-		timer.innerHTML=5;
+		timer.innerHTML=20;
 		pameStart2.style.display="flex";
 		pameStart2.style.margin="0px auto";
 		DisCancas();
+		
+		
 		
 		// over++;
 		// pameStart();
@@ -135,7 +134,23 @@ function countdown(){
 // 	front.style.display="block";
 // 	behind.style.display="none";
 // }
-
+function ShowCanvas(){
+	var ShowCanvas=document.getElementById("draw");
+	var ClearID=document.getElementById("ClearID");
+	ShowCanvas.style.display="block";
+	ClearID.style.display="block";
+	ClearID.style.margin="0px auto";
+    document.getElementById("topicc").style.display="";
+}
+function DisCancas(){
+	var DisCancas=document.getElementById("draw");
+	var ClearID=document.getElementById("ClearID");
+	DisCancas.style.display="none";
+	ClearID.style.display="none";
+	target();
+    // document.getElementById("topicc").style.display="none";
+    
+}
 
 function target(){
 	var target=["骷髏頭","骷髏頭","燈泡","圓","足球","蘑菇","降落傘","漢堡","帽子","臉","眼睛",
@@ -152,183 +167,36 @@ function EvalSound(soundobj) {
 	thissound.play();
 }
 
-
-/*
-get the best bounding box by trimming around the drawing
+/* 分數判斷由上而下是C B A S SS SSS
+switch(score){
+	case 0:
+		break;
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	default:
+		break;
+}
 */
-function getMinBox() {
-    //get coordinates 
-    var coorX = coords.map(function(p) {
-        return p.x
-    });
-    var coorY = coords.map(function(p) {
-        return p.y
-    });
 
-    //find top left and bottom right corners 
-    var min_coords = {
-        x: Math.min.apply(null, coorX),
-        y: Math.min.apply(null, coorY)
-    }
-    var max_coords = {
-        x: Math.max.apply(null, coorX),
-        y: Math.max.apply(null, coorY)
-    }
-
-    //return as strucut 
-    return {
-        min: min_coords,
-        max: max_coords
-    }
+/* time剩餘時間
+switch(time){
+	case 5:
+		break;
+	case 4:
+		break;
+	case 3:
+		break;
+	case 2:
+		break;
+	case 1:
+		break;
+	default:
+		break;
 }
-
-/*
-get the current image data 
 */
-function getImageData() {
-        //get the minimum bounding box around the drawing 
-        const mbb = getMinBox()
-
-        //get image data according to dpi 
-        const dpi = window.devicePixelRatio
-        const imgData = canvas.contextContainer.getImageData(mbb.min.x * dpi, mbb.min.y * dpi,
-                                                      (mbb.max.x - mbb.min.x) * dpi, (mbb.max.y - mbb.min.y) * dpi);
-        return imgData
-    }
-
-/*
-get the prediction 
-*/
-function getFrame() {
-    //make sure we have at least two recorded coordinates 
-    if (coords.length >= 2) {
-
-        //get the image data from the canvas 
-        const imgData = getImageData()
-
-        //get the prediction 
-        const pred = model.predict(preprocess(imgData)).dataSync()
-
-        //find the top 5 predictions 
-        const indices = findIndicesOfMax(pred, 5)
-        const probs = findTopValues(pred, 5)
-        const names = getClassNames(indices)
-
-        //set the table 
-        setTable(names, probs)
-    }
-
-}
-
-function setTable(top5, probs)
-   { 
-   for (var i = 0; i < top5.length; i++) {    
-    let sym = document.getElementById('sym'+(i+1))
-    let prob = document.getElementById('prob'+(i+1))
-    sym.innerHTML = top5[i]
-    prob.innerHTML = Math.round(probs[i] * 100)
-    } 
-    createPie(".pieID.legend", ".pieID.pie");
-
-}
-
-
-
-
-
-
-
-//get the latex symbols by indices 
-function getSymbols(indices)
-{
-    var outp = []
-    for (var i= 0 ; i < indices.length ; i++)
-        outp[i] = symbols[indices[i]]
-    return outp
-}
-	  
-//load the class names 	  
-async function loadDict()
-{
-  await $.ajax({
-  url: 'class_names.txt',
-  dataType: 'text',}).done(success);
-}
-	  
-//load the class names 
-function success(data)
-{
-    lst = data.split(/\n/)
-    symbols = []
-    for(var i = 0 ; i < lst.length -1  ; i++)
-    {
-        let symbol = lst[i]
-        symbols[i] = symbol
-    }
-}
-	  
-//get indices of the top probs
-function findIndicesOfMax(inp, count) {
-    var outp = [];
-    for (var i = 0; i < inp.length; i++) {
-        outp.push(i); // add index to output array
-        if (outp.length > count) {
-            outp.sort(function(a, b) { return inp[b] - inp[a]; }); // descending sort the output array
-            outp.pop(); // remove the last index (index of smallest element in output array)
-        }
-    }
-    return outp;
-}
-	  
-//find the top 5 predictions 
-function findTopValues(inp, count){
-    var outp = [];
-    let indices = findIndicesOfMax(inp, count)
-    // show 5 greatest scores
-    for (var i = 0; i < indices.length; i++)
-        outp[i] = inp[indices[i]]
-    return outp
-}
-	 
-//preprocess the data 
-function preprocess(imgData)
-{
-return tf.tidy(()=>{
-	  
-    const tensor = tf.fromPixels(imgData).toFloat()
-    const offset = tf.scalar(255.0);
-    // Normalize the image 
-    const normalized = tf.scalar(1.0).sub(tensor.div(offset));
-    const resized = tf.image.resizeBilinear(normalized, [28, 28])
-    const sliced   = resized.slice([0, 0, 1], [28, 28, 1])
-    const batched = sliced.expandDims(0)
-    return batched
-})
-} 
-
-/*
-allow drawing on canvas
-*/
-function allowDrawing() {
-    if (mode == 'en')
-        document.getElementById('status').innerHTML = 'Model Loaded';
-    else
-        document.getElementById('status').innerHTML = 'Model Loaded';
-    $('button').prop('disabled', false);
-    var slider = document.getElementById('myRange');
-    slider.oninput = function() {
-        canvas.freeDrawingBrush.width = this.value;
-    };
-}
-
-//load the model 
-async function loadModel()
-{
-    model = await tf.loadLayersModel('model.json')
-    //warm up 
-    model.predict(tf.zeros([1,28,28,1]))
-    allowDrawing()
-    await loadDict()
-}
-
-loadModel()
